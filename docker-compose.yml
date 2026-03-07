@@ -33,7 +33,7 @@ services:
       - APP_SECURITY_PASSWORD=admin123
       - APILAYER_API_KEY=wguGQfewsoHx2nBJBP6viBN58bLYTZWZ
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      test: ["CMD", "curl", "-f", "-u", "admin:admin123", "http://localhost:8080/actuator/health"]
       interval: 30s
       timeout: 10s
       retries: 3
