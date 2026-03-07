@@ -1,0 +1,195 @@
+openapi: "3.0.3"
+info:
+  title: Exchange Rate API
+  description: API para conversión de divisas PEN ↔ USD
+  version: "1.0.0"
+  contact:
+    name: Demo Team
+    email: demo@example.com
+
+servers:
+  - url: http://localhost:8080
+    description: Local
+
+tags:
+  - name: Exchange
+    description: Operaciones de conversión de divisas
+
+paths:
+  /api/exchange/convert:
+    post:
+      tags:
+        - Exchange
+      summary: Convertir divisa
+      description: Convierte una cantidad de dinero entre PEN y USD usando el tipo de cambio actual
+      operationId: convertCurrency
+      security:
+        - basicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConvertRequest'
+      responses:
+        '200':
+          description: Conversión exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConvertResponse'
+        '400':
+          description: Solicitud inválida
+        '401':
+          description: No autorizado
+
+  /api/exchange/history:
+    get:
+      tags:
+        - Exchange
+      summary: Historial de conversiones
+      description: Lista el historial de conversiones en un rango de fechas
+      operationId: getHistory
+      security:
+        - basicAuth: []
+      parameters:
+        - name: from
+          in: query
+          required: true
+          description: Fecha de inicio (yyyy-MM-dd)
+          schema:
+            type: string
+            format: date
+        - name: to
+          in: query
+          required: true
+          description: Fecha de fin (yyyy-MM-dd)
+          schema:
+            type: string
+            format: date
+        - name: currency
+          in: query
+          required: false
+          description: Filtrar por moneda (ej. USD, PEN)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Historial obtenido
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExchangeHistoryDto'
+        '401':
+          description: No autorizado
+
+  /api/exchange/summary:
+    get:
+      tags:
+        - Exchange
+      summary: Resumen por tipo de moneda
+      description: Suma el total de dinero convertido agrupado por tipo de moneda destino
+      operationId: getSummary
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: Resumen obtenido
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CurrencySummaryDto'
+        '401':
+          description: No autorizado
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+    ConvertRequest:
+      type: object
+      required:
+        - from
+        - to
+        - amount
+      properties:
+        from:
+          type: string
+          example: USD
+          description: Moneda de origen
+        to:
+          type: string
+          example: PEN
+          description: Moneda de destino
+        amount:
+          type: number
+          format: double
+          example: 100.0
+          description: Cantidad a convertir
+
+    ConvertResponse:
+      type: object
+      properties:
+        from:
+          type: string
+          example: USD
+        to:
+          type: string
+          example: PEN
+        amount:
+          type: number
+          format: double
+          example: 100.0
+        convertedAmount:
+          type: number
+          format: double
+          example: 374.0
+        rate:
+          type: number
+          format: double
+          example: 3.74
+        date:
+          type: string
+          format: date
+          example: "2025-04-15"
+
+    ExchangeHistoryDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        from:
+          type: string
+        to:
+          type: string
+        amount:
+          type: number
+          format: double
+        convertedAmount:
+          type: number
+          format: double
+        rate:
+          type: number
+          format: double
+        date:
+          type: string
+          format: date
+
+    CurrencySummaryDto:
+      type: object
+      properties:
+        currency:
+          type: string
+          example: PEN
+        totalConverted:
+          type: number
+          format: double
+          example: 1500.75
