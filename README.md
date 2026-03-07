@@ -174,3 +174,42 @@ Coleccion incluida:
 
 Importala en Postman y ajusta `baseUrl`, `username` y `password` si corresponde.
 
+---
+
+## Cumplimiento de requerimientos de la prueba tecnica
+
+### Microservicio
+
+| Requerimiento | Estado |
+|---|---|
+| Arquitectura N capas (controller / service / repository / entity / client) | ✅ |
+| `POST /api/exchange/convert` — conversion PEN ↔ USD | ✅ |
+| `GET /api/exchange/history` — historial con filtro por fecha y moneda | ✅ |
+| `GET /api/exchange/summary` — suma total agrupada por moneda destino | ✅ |
+| Spring Cloud Feign Client para consumo de APILayer | ✅ |
+| PostgreSQL + Spring Data JPA (persistencia de historial) | ✅ |
+| Spring Security HTTP Basic Auth | ✅ |
+
+### Contrato y documentacion
+
+| Requerimiento | Estado |
+|---|---|
+| Contract First — OpenAPI 3.0 YAML (`exchange-api.yaml`) | ✅ |
+| `openapi-generator-maven-plugin` genera interfaces y modelos | ✅ |
+| Swagger UI accesible en `/swagger-ui.html` | ✅ |
+
+### Infraestructura
+
+| Requerimiento | Estado |
+|---|---|
+| Dockerfile multi-stage (build JDK 25 + runtime JRE 25) | ✅ |
+| Docker Compose (app + PostgreSQL 16 con healthcheck) | ✅ |
+| Script SQL de inicializacion (`db/init.sql`) | ✅ |
+
+### Entregables
+
+| Requerimiento | Estado |
+|---|---|
+| Tests unitarios JUnit 5 + Mockito (4 tests, sin contexto Spring) | ✅ |
+| Coleccion Postman JSON | ✅ |
+| Repositorio GitHub en rama `enrique-b` | ✅ |
