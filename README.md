@@ -12,6 +12,8 @@ Microservicio en Spring Boot para conversion de divisas usando APILayer, con per
 - Swagger UI + OpenAPI
 - Actuator healthcheck
 
+powershell -ExecutionPolicy Bypass -File .\run-tests.ps1 -Mode all -StartPostgres
+
 ## Stack tecnico
 
 - Java 25
